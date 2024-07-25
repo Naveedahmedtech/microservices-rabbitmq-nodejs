@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: CHILLOUT_BACKEND
+spec:
+  type: LoadBalancer
+  selector:
+    app: CHILLOUT_BACKEND
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
