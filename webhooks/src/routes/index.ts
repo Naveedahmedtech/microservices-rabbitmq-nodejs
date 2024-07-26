@@ -7,7 +7,7 @@ import { emailWebhook } from "@/controller";
 router.use("/email", emailWebhook);
 
 router.get("/csrf-token", csrfProtection, (req: Request, res: Response) => {
-  res.json({ csrfToken: req.csrfToken() });
+  res.json({ csrfToken: res.locals.csrfToken });
 });
 
 export default router;

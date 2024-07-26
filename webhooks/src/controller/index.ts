@@ -5,6 +5,8 @@ import {
   sendSuccessResponse,
 } from "@/utils/responseHandler";
 import { handleAccountRegistration } from "@/utils/webhookHelper";
+// ** external libraries
+import amqp from "amqplib/callback_api";
 
 export const emailWebhook = async (
   req: Request,
@@ -13,22 +15,64 @@ export const emailWebhook = async (
 ) => {
   const { event_type } = req.body;
   try {
-    switch (event_type) {
-      case "account_registration":
-        const {
-          data: { email, access_token },
-        } = req.body;
-        const result = await handleAccountRegistration(email, access_token);
-        return sendSuccessResponse(
-          res,
-          "Email send successfully",
-          "We've sent you a verification link on your email address. Please verify it to complete the registration!",
-          201
+    amqp.connect("amqp://localhost", (err, conn) => {
+      if (err) {
+        throw err;
+      }
+
+      // Create a channel
+      conn.createChannel((err, ch) => {
+        if (err) {
+          throw err;
+        }
+
+        const exchange = "email_exchange";
+        const routingKey = "account.registration";
+        // Assert exchange
+        ch.assertExchange(exchange, "topic", {
+          durable: true,
+        });
+
+        // Assert queue
+        ch.assertQueue(
+          "",
+          {
+            durable: true,
+            exclusive: true,
+          },
+          (err, q) => {
+            if (err) {
+              throw err;
+            }
+
+            // Bind queue to exchange with routing key
+            ch.bindQueue(q.queue, exchange, routingKey);
+
+            // Set up a consumer
+            ch.consume(
+              q.queue,
+              (msg: any) => {
+                if (msg.content) {
+                  console.log(`Received: ${msg.content.toString()}`);
+                  // Process the message here
+
+                  // Acknowledge the message
+                  ch.ack(msg);
+                }
+              },
+              {
+                noAck: true,
+              }
+            );
+
+            console.log(
+              `Waiting for messages in queue: ${q.queue}. To exit press CTRL+C`
+            );
+          }
         );
-      default:
-        logger.error("Invalid event type");
-        return sendErrorResponse(res, "Invalid Event type", 400);
-    }
+      });
+    });
+
   } catch (error: Error | any) {
     next(error);
   }
