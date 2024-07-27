@@ -1,5 +1,6 @@
 import { sendEmail } from "@/lib/sendEmail";
-import { compileEmailTemplate } from "./emailHelper";
+import { compileEmailTemplate } from "@/utils/emailHelper";
+import logger from "@/utils/logger";
 
 export const handleAccountRegistration = async (email:string, accessToken:string) => {
   try {
@@ -21,7 +22,9 @@ export const handleAccountRegistration = async (email:string, accessToken:string
     const html = await compileEmailTemplate(templateName, foldername, data);
     data.html = html;
     await sendEmail(data);
+    return true;
   } catch (error) {
-    throw error;
+    logger.error("Couldn't send email", 400)
+    return false;
   }
 };

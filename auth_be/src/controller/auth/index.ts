@@ -9,6 +9,7 @@ import {
 import { CustomError } from "@/utils/CustomError";
 import { verifyToken } from "@/utils/jwt";
 import prismaClient from "@/utils/prisma";
+import { publishToRabbitMQ } from "@/utils/rabbitmqPublisher";
 import {
   sendErrorResponse,
   sendSuccessResponse,
@@ -27,31 +28,19 @@ export const registerUser = async (
 
     // Prepare data for email
     const payload = {
-      data: {
-        email: req.body.email,
-        access_token: newUser.accessToken,
-      },
-      event_type: "account_registration",
+      email: req.body.email,
+      access_token: newUser.accessToken,
     };
 
-    amqp.connect("amqp://localhost", (err, conn) => {
-      if (err) throw err;
-      conn.createChannel((err, ch) => {
-        if (err) throw err;
+    const message = JSON.stringify(payload);
 
-        const exchange = "email_exchange";
-        const routingKey = "account.registration";
-
-        ch.assertExchange(exchange, "topic", {
-          durable: true,
-        });
-        const message = JSON.stringify(payload);
-        ch.publish(exchange, routingKey, Buffer.from(message));
-
-        console.log(`${message} sent`);
-      });
-    });
-
+    // Publish the message to RabbitMQ
+    publishToRabbitMQ(
+      "amqp://localhost",
+      "email_exchange",
+      "account.registration",
+      message
+    );
     return sendSuccessResponse(
       res,
       "User record entered in the database successfully. Please verify email to complete registration",

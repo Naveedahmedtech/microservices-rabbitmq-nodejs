@@ -15,35 +15,28 @@ export const emailWebhook = async (
 ) => {
   const { event_type } = req.body;
   try {
-    amqp.connect("amqp://localhost", (err, conn) => {
-      if (err) {
-        throw err;
-      }
+    amqp.connect("amqp://localhost", (err0, conn) => {
+      if (err0) throw err0;
 
       // Create a channel
-      conn.createChannel((err, ch) => {
-        if (err) {
-          throw err;
-        }
+      conn.createChannel((err1, ch) => {
+        if (err1) throw err1;
 
         const exchange = "email_exchange";
         const routingKey = "account.registration";
         // Assert exchange
         ch.assertExchange(exchange, "topic", {
-          durable: true,
+          durable: false,
         });
 
         // Assert queue
         ch.assertQueue(
           "",
           {
-            durable: true,
             exclusive: true,
           },
-          (err, q) => {
-            if (err) {
-              throw err;
-            }
+          (err2, q) => {
+            if (err2) throw err2;
 
             // Bind queue to exchange with routing key
             ch.bindQueue(q.queue, exchange, routingKey);
@@ -72,7 +65,6 @@ export const emailWebhook = async (
         );
       });
     });
-
   } catch (error: Error | any) {
     next(error);
   }

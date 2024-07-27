@@ -3,12 +3,15 @@
 import { loadEnv } from "@/config";
 import { createApp } from "@/app";
 import logger from "@/utils/logger";
+import { registerEmail } from "@/utils/rabbitmq/rabbitmq";
 
 loadEnv();
 
 const app = createApp();
 
 const PORT = process.env.PORT || 8000;
+
+registerEmail();
 
 const startServer = async () => {
   try {
