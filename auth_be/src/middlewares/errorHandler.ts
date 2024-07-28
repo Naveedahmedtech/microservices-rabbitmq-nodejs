@@ -9,7 +9,6 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("EBADCSRFTOKEN", err.code);
   const statusCode = err instanceof CustomError ? err.statusCode : err.code === "EBADCSRFTOKEN" ? 403 : 500;
   const message =
     err instanceof CustomError ? err.message : err.code === "EBADCSRFTOKEN" ? "Invalid CSRF TOKEN" : "INTERNAL SERVER ERROR!";

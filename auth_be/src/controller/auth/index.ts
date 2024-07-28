@@ -1,13 +1,18 @@
+// ** config
 import { NextFunction, Request, Response } from "@/config/express.config";
+// ** services
 import {
   getFacebookUrl,
   getGoogleUrl,
   handleFacebookCallback,
   handleGoogleCallback,
   registerUserService,
+  verifyRegistrationService,
 } from "@/services/auth";
+// * types
+import { registrationEmailPayloadT } from "@/types";
+// ** utils
 import { CustomError } from "@/utils/CustomError";
-import { verifyToken } from "@/utils/jwt";
 import prismaClient from "@/utils/prisma";
 import { publishToRabbitMQ } from "@/utils/rabbitmqPublisher";
 import {
@@ -15,8 +20,9 @@ import {
   sendSuccessResponse,
 } from "@/utils/responseHandler";
 
-// ** external libraries
-import amqp from "amqplib/callback_api";
+
+// TODO: Add roles and permissions
+// TODO: Add Recaptcha
 
 export const registerUser = async (
   req: Request,
@@ -27,9 +33,9 @@ export const registerUser = async (
     const newUser = await registerUserService(req.body);
 
     // Prepare data for email
-    const payload = {
+    const payload: registrationEmailPayloadT = {
       email: req.body.email,
-      access_token: newUser.accessToken,
+      access_token: newUser.accessToken
     };
 
     const message = JSON.stringify(payload);
@@ -43,11 +49,11 @@ export const registerUser = async (
     );
     return sendSuccessResponse(
       res,
-      "User record entered in the database successfully. Please verify email to complete registration",
+      "User record entered in the database successfully. Please verify email to complete registration.",
       newUser,
       201
     );
-  } catch (error: Error | any) {
+  } catch (error: any) {
     // Handle registration errors
     if (error.code === "P2002") {
       const fieldName = error.meta.target[0];
@@ -149,23 +155,7 @@ export const verifyRegistration = async (
 ) => {
   const token = req.query.registrationToken as string;
   try {
-    const decodedToken = await verifyToken(token);
-    if (
-      typeof decodedToken !== "object" ||
-      !decodedToken.hasOwnProperty("id")
-    ) {
-      throw new CustomError("Invalid token structure", 401);
-    }
-
-    await prismaClient.user.update({
-      where: {
-        id: decodedToken.id,
-      },
-      data: {
-        isEmailVerified: true,
-      },
-    });
-
+    await verifyRegistrationService(token);
     return sendSuccessResponse(
       res,
       "Registration verification successfully done!",
@@ -177,6 +167,8 @@ export const verifyRegistration = async (
   }
 };
 
+
+// TODO: Move users to USER service 
 // FIND USERS
 export const getAll = async (
   req: Request,

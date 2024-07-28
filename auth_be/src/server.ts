@@ -1,5 +1,3 @@
-// TODO: API KEY
-
 import { loadEnv } from "@/config";
 import { createApp } from "@/app";
 import logger from "@/utils/logger";

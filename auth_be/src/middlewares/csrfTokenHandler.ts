@@ -33,6 +33,4 @@ const csrfProtection = (
   next();
 };
 
-
-
 export default csrfProtection;
