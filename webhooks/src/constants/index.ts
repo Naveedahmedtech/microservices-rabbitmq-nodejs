@@ -1,3 +1,5 @@
+import { constantTemFNamesT, ENVT } from "@/types";
+
 export const RESPONSE_CODES = {
   SUCCESS: "SUCCESS",
   BAD_REQUEST: "BAD_REQUEST",
@@ -11,4 +13,15 @@ export const RESPONSE_CODES = {
   CONFLICT: "CONFLICT",
   UNPROCESSABLE_ENTITY: "UNPROCESSABLE_ENTITY",
   TO_MANY_REQUESTS: "TO_MANY_REQUEST"
+};
+
+
+export const TEMPLATE_FOLDER_NAME: constantTemFNamesT = {
+  AUTH: "auth",
+};
+
+
+
+export const ENV: ENVT = {
+  AMQP_HOST: process.env.AMQP_HOST!,
 };

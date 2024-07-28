@@ -1,8 +1,9 @@
 import handlebars from "handlebars";
 import fs from "fs";
 import path from "path";
+import { emailTemplateT } from "@/types";
 
-export const compileEmailTemplate = async (
+export const compileEmailTemplate: emailTemplateT = async (
   templateName: string,
   foldername: string,
   data: any
@@ -16,7 +17,6 @@ export const compileEmailTemplate = async (
       foldername,
       `${templateName}.hbs`
     );
-    console.log("PATH---> ", templatePath);
     const templateSource = fs.readFileSync(templatePath, "utf8");
 
     // Compile the template

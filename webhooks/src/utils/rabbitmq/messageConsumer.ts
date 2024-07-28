@@ -1,12 +1,13 @@
+import { consumeMessagesT } from "@/types";
 import logger from "@/utils/logger";
 
 const MAX_RETRIES = 5;
 
-export const consumeMessages = (
-  ch: any,
-  queue: any,
-  processMessage: any,
-  loggerMessage: any
+export const consumeMessages: consumeMessagesT = (
+  ch,
+  queue,
+  processMessage,
+  loggerMessage
 ) => {
   ch.consume(
     queue,

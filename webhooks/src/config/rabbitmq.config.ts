@@ -1,6 +1,7 @@
+import { connectToAmqpT } from "@/types";
 import amqp from "amqplib/callback_api";
 
-const connectToAmqp = (url:string, callback:any) => {
+const connectToAmqp: connectToAmqpT = (url, callback) => {
   amqp.connect(url, (err0, conn) => {
     if (err0) {
       callback(err0);

@@ -1,10 +1,11 @@
 import { sendRegistrationEmail } from "@/services/auth";
 import { setupRabbitMQ } from "@/utils/rabbitmq/rabbitmqSetup";
 import { consumeMessages } from "@/utils/rabbitmq/messageConsumer";
+import { ENV } from "@/constants";
 
 export const registerEmail = async () => {
   setupRabbitMQ(
-    "amqp://localhost",
+    ENV.AMQP_HOST,
     "email_exchange",
     "account.registration",
     (err: any, ch: any, queue: any) => {

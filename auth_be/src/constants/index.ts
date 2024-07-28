@@ -1,4 +1,5 @@
 import { loadEnv } from "@/config";
+import { ENVT } from "@/types";
 
 loadEnv();
 
@@ -17,7 +18,7 @@ export const RESPONSE_CODES = {
   TO_MANY_REQUESTS: "TO_MANY_REQUEST",
 };
 
-export const ENV = {
+export const ENV: ENVT = {
   // Facebook
   FACEBOOK_APP_ID: process.env.FB_APP_ID!,
   FACEBOOK_APP_SECRET: process.env.FB_SECRET!,

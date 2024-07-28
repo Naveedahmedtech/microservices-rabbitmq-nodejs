@@ -16,6 +16,12 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { sessionHandler } from "./middlewares/sessionHandler";
 
+// TODO: Session handlers
+// TODO: Protect Headers
+// TODO: Protect redirects from server side
+// TODO: API KEY
+
+
 export const createApp = () => {
   app.use(requestLogger);
   app.use(express.json());

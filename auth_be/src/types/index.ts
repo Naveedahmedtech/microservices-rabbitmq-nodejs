@@ -16,3 +16,25 @@ export type registrationEmailPayloadT = {
 };
 
 
+export type ENVT = {
+  // Facebook
+  FACEBOOK_APP_ID: string;
+  FACEBOOK_APP_SECRET: string;
+  FACEBOOK_REDIRECT_URI: string;
+  FACEBOOK_SCOPE: string;
+  FACEBOOK_RESPONSE_TYPE: string;
+  FACEBOOK_OAUTH_URL: string;
+  FACEBOOK_VERIFY_URL: string;
+  FACEBOOK_RESPONSE_URL: string;
+  FACEBOOK_FIELDS: string;
+  // Google
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_SECRET_ID: string;
+  GOOGLE_REDIRECT_URI: string;
+  // JWT
+  ACCESS_TOKEN_EXPIRY: string;
+  REFRESH_TOKEN_EXPIRY: string;
+  JWT_SECRET: string;
+};
+
+

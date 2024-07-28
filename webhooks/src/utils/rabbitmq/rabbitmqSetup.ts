@@ -1,6 +1,7 @@
 import connectToAmqp from "@/config/rabbitmq.config";
+import { setupRabbitMQT } from "@/types";
 
-export const setupRabbitMQ = (url:string, exchange:string, routingKey:string, callback:any) => {
+export const setupRabbitMQ: setupRabbitMQT = (url, exchange, routingKey, callback) => {
   connectToAmqp(url, (err:any, ch:any) => {
     if (err) return callback(err);
 

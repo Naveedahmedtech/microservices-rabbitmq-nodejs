@@ -1,5 +1,3 @@
-// TODO: API KEY
-
 import { loadEnv } from "@/config";
 import { createApp } from "@/app";
 import logger from "@/utils/logger";
@@ -11,6 +9,7 @@ const app = createApp();
 
 const PORT = process.env.PORT || 8000;
 
+// RABBITMQ consumers listening
 registerEmail();
 
 const startServer = async () => {

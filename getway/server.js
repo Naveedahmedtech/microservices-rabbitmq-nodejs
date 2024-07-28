@@ -19,5 +19,5 @@ app.use(`/${AUTH_ROUTE}`, proxy(`http://localhost:${AUTH_PORT}`));
 app.use(`/${WEBHOOK_ROUTE}`, proxy(`http://localhost:${WEBHOOK_PORT}`));
 
 app.listen(PORT, () => {
-  console.log(`SERVER IS LISTING ON ${PORT}`);
+  console.log(`********* \n ---> SERVER IS LISTING ON [${PORT}] \n *******`);
 });
