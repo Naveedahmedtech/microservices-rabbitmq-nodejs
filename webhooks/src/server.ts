@@ -15,7 +15,7 @@ registerEmail();
 const startServer = async () => {
   try {
     app.listen(PORT, () => {
-      logger.info(`\n
+      console.info(`\n
         *************************
           ------->  EMAIL APP IS RUNNING ON PORT [${PORT}]
         *************************************

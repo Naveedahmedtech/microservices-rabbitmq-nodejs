@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 8000;
 const startServer = async () => {
   try {
     app.listen(PORT, () => {
-      logger.info(`\n
+      console.info(`\n
         *************************
           ------->  AUTH APP IS RUNNING ON PORT [${PORT}]
         *************************************
